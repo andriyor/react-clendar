@@ -1,65 +1,56 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+
 import moment from 'moment';
-import Button from '../Button';
-import Week from './Week';
+
 import Days from './Days';
+import Week from './Week';
+import Button from '../Button';
+
 import './style.css';
 
-class DatePicker extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shown: moment()
-    };
+const DatePicker = () => {
+  
+  const [shown, setShown] = useState(moment());
+  const [picked, setPicked] = useState(moment());
+  
+  const showMonth = (months) => {
+    const shownM = shown.clone().add(months, 'months');
+    setShown(shownM);
   }
-
-  showMonth(months) {
-
-    const shown = this.state.shown
-      .clone().add(months, 'months');
-
-    this.setState({shown});
-  }
-
-  quickPick(days) {
-
+  
+  const quickPick = (days) => {
     const picked = moment().add(days, 'days');
     const shown = picked.clone();
-
-    this.setState({picked, shown});
+    setShown(shown);
+    setPicked(picked);
   }
-
-  pick(date) {
-
+  
+  const pick = (date) => {
     const picked = date.clone();
     const shown = picked.clone();
-
-    this.setState({ picked, shown });
+    setShown(shown);
+    setPicked(picked);
   }
-
-  render() {
-    const { shown, picked } = this.state;
-
-    return (
-      <div className="date-picker">
-        <ul className="date-picker__head">
-          <li>
-            <Button filled onClick={ () => this.showMonth(-1) }>‹</Button>
-          </li>
-          <li>
-            <Button filled onClick={() => this.quickPick(0)}>hoy</Button>
-            <Button filled onClick={() => this.quickPick(1)}>mañana</Button>
-          </li>
-          <li>
-            <Button filled onClick={() => this.showMonth(1)}>›</Button>
-          </li>
-        </ul>
-        <div className="date-picker__month">{shown.format('MMMM')}</div>
-        <Week />
-        <Days shown={shown} picked={picked} onPick={ date => this.pick(date) } />
-      </div>
-    );
-  }
+  
+  return (
+    <div className="date-picker">
+      <ul className="date-picker__head">
+        <li>
+          <Button filled onClick={() => showMonth(-1)}>‹</Button>
+        </li>
+        <li>
+          <Button filled onClick={() => quickPick(0)}>hoy</Button>
+          <Button filled onClick={() => quickPick(1)}>mañana</Button>
+        </li>
+        <li>
+          <Button filled onClick={() => showMonth(1)}>›</Button>
+        </li>
+      </ul>
+      <div className="date-picker__month">{shown.format('MMMM')}</div>
+      <Week/>
+      <Days shown={shown} picked={picked} onPick={date => pick(date)}/>
+    </div>
+  );
 }
 
 export default DatePicker;
