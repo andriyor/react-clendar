@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import Days from './Days';
 import Week from './Week';
@@ -10,16 +10,16 @@ import './style.css';
 
 const DatePicker = () => {
   
-  const [shown, setShown] = useState(moment());
-  const [picked, setPicked] = useState(moment());
+  const [shown, setShown] = useState(dayjs());
+  const [picked, setPicked] = useState(dayjs());
   
   const showMonth = (months) => {
-    const shownM = shown.clone().add(months, 'months');
+    const shownM = shown.clone().add(months, 'month');
     setShown(shownM);
   }
   
   const quickPick = (days) => {
-    const picked = moment().add(days, 'days');
+    const picked = dayjs().add(days, 'day');
     const shown = picked.clone();
     setShown(shown);
     setPicked(picked);
